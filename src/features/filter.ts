@@ -1,14 +1,15 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Todo } from '../types/Todo';
+import { Status } from '../types/Status';
 
 const initialState = {
   query: '',
-  status: 'all',
+  status: 'all' as Status,
 };
 
 export function filterTodos(
-  status: string,
+  status: Status,
   query: string,
   todos: Todo[],
 ): Todo[] {
@@ -39,7 +40,7 @@ export const filterSlice = createSlice({
     setQuery(state, { payload }: PayloadAction<string>) {
       state.query = payload;
     },
-    setStatus(state, { payload }: PayloadAction<string>) {
+    setStatus(state, { payload }: PayloadAction<Status>) {
       state.status = payload;
     },
   },

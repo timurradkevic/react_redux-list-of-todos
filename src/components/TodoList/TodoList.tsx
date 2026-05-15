@@ -1,11 +1,8 @@
 /* eslint-disable */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import classNames from 'classnames';
 import { currentTodoSlice } from '../../features/currentTodo';
-import { getTodos } from '../../api';
-import { todosSlice } from '../../features/todos';
-import { Loader } from '../Loader';
 import { filterTodos } from '../../features/filter';
 
 export const TodoList: React.FC = () => {
@@ -15,17 +12,6 @@ export const TodoList: React.FC = () => {
   const { query, status } = useAppSelector(state => state.filter);
   const preparedTodos = filterTodos(status, query, todos);
 
-  useEffect(() => {
-    dispatch(todosSlice.actions.setLoading(true));
-    getTodos()
-      .then(loadedTodos => {
-        dispatch(todosSlice.actions.setTodos(loadedTodos));
-      })
-      .catch(error => {
-        throw error;
-      })
-      .finally(() => dispatch(todosSlice.actions.setLoading(false)));
-  }, [dispatch]);
 
   return (
     <>
@@ -35,7 +21,6 @@ export const TodoList: React.FC = () => {
         </p>
       )}
 
-      {loading && <Loader />}
       {!loading && preparedTodos.length !== 0 && (
         <table className="table is-narrow is-fullwidth">
           <thead>
@@ -81,11 +66,8 @@ export const TodoList: React.FC = () => {
                     data-cy="selectButton"
                     className="button"
                     type="button"
-                    onClick={() => {
-                      dispatch(currentTodoSlice.actions.setCurrentTodo(todo));
-                      console.log(currentTodo);
-                    }}
-                  >
+                    onClick={() => dispatch(currentTodoSlice.actions.setCurrentTodo(todo))}
+                  > 
                     <span className="icon">
                       <i
                         className={classNames({
